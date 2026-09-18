@@ -49,6 +49,8 @@ export interface ListBoxSelectionProps extends TranslateWithId<TranslationKey> {
    * whether the selection should display a badge or a single clear icon.
    */
   selectionCount?: number;
+
+  selectionTexts?: [string];
   /**
    * Specify whether or not the clear selection element should be disabled
    */
@@ -95,6 +97,7 @@ function ListBoxSelection({
   disabled,
   readOnly,
   onClearSelection,
+  selectionTexts,
   ...rest
 }: ListBoxSelectionProps) {
   const prefix = usePrefix();
@@ -128,12 +131,10 @@ function ListBoxSelection({
   }
 
   if (hasSelectionCount) {
-    return (
+    return selectionTexts?.map(text => (
       <div className={tagClasses}>
-        <span
-          className={`${prefix}--tag__label`}
-          title={selectionCount?.toString()}>
-          {selectionCount}
+        <span className={`${prefix}--tag__label`} title={text?.toString()}>
+          {text}
         </span>
         <button
           aria-label={description}
@@ -147,7 +148,7 @@ function ListBoxSelection({
           <Close />
         </button>
       </div>
-    );
+    ));
   }
 
   return (
@@ -179,11 +180,6 @@ ListBoxSelection.propTypes = {
   disabled: PropTypes.bool,
 
   /**
-   * Whether or not the listbox is readonly
-   */
-  readOnly: PropTypes.bool,
-
-  /**
    * Specify an optional `onClearSelection` handler that is called when the underlying
    * element is cleared
    */
@@ -194,6 +190,12 @@ ListBoxSelection.propTypes = {
    * clear selection element is clicked
    */
   onClick: PropTypes.func,
+
+  /**
+   * Specify an optional `onKeyDown` handler that is called when the underlying
+   * clear selection element fires a keydown event
+   */
+  onKeyDown: PropTypes.func,
 
   /**
    * Specify an optional `onMouseDown` handler that is called when the underlying
@@ -208,10 +210,9 @@ ListBoxSelection.propTypes = {
   onMouseUp: PropTypes.func,
 
   /**
-   * Specify an optional `onKeyDown` handler that is called when the underlying
-   * clear selection element fires a keydown event
+   * Whether or not the listbox is readonly
    */
-  onKeyDown: PropTypes.func,
+  readOnly: PropTypes.bool,
 
   /**
    * Specify an optional `selectionCount` value that will be used to determine

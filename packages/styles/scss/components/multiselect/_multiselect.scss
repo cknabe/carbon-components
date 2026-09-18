@@ -44,9 +44,76 @@
     padding: 0;
   }
 
+  // When tags (selections) are shown inside the filterable multi-select field,
+  // allow them to wrap onto new lines instead of overflowing horizontally.
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected {
+    block-size: auto;
+    max-block-size: none;
+  }
+
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--list-box__field {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: visible;
+    block-size: auto;
+    align-items: center;
+    gap: $spacing-02;
+    // Reserve right-side space for the absolute-positioned clear (24px) +
+    // trigger (32px) buttons so the input row never slides under them.
+    padding-block: $spacing-02;
+    padding-inline-end: convert.to-rem(56px);
+    padding-inline-start: $spacing-05;
+    white-space: normal;
+    // Sit below the absolutely-positioned menu in the same stacking context.
+    z-index: 0;
+  }
+
+  // Allow the input to shrink and share the last row with tags.
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input {
+    flex: 1;
+    inline-size: auto;
+    min-inline-size: convert.to-rem(80px);
+    // Undo the padding already handled by the field container.
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+  }
+
+  // Anchor the clear-input × and the trigger chevron to the bottom of the
+  // field so they always align with the last (input) row regardless of how
+  // many tag rows are above it.
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--list-box__field
+    .#{$prefix}--list-box__selection,
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--list-box__field
+    .#{$prefix}--list-box__menu-icon {
+    inset-block-start: auto;
+    inset-block-end: 0;
+    transform: none;
+    // Centre vertically within one standard row height (40px default).
+    margin-block-end: calc((#{layout.size('height')} - convert.to-rem(24px)) / 2);
+  }
+
+  // Ensure the dropdown menu paints above the tag+input field when expanded.
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--list-box__menu {
+    z-index: z('dropdown');
+    position: absolute;
+  }
+
   .#{$prefix}--multi-select .#{$prefix}--tag {
     margin: 0 $spacing-03 0 $spacing-05;
     min-inline-size: auto;
+  }
+
+  // Tags inside the wrapping filterable field are spaced by gap; reset margin.
+  .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--list-box__field
+    .#{$prefix}--tag {
+    margin: 0;
   }
 
   .#{$prefix}--multi-select .#{$prefix}--list-box__menu {

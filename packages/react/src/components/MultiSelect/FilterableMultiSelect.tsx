@@ -1026,6 +1026,7 @@ export const FilterableMultiSelect = forwardRef(function FilterableMultiSelect<
                 }
               }}
               selectionCount={selectedItemsLength}
+              selectionTexts={controlledSelectedItems?.map(i => i.text)}
               translateWithId={translateWithId}
               disabled={disabled}
             />
@@ -1220,13 +1221,6 @@ FilterableMultiSelect.propTypes = {
   decorator: PropTypes.node,
 
   /**
-   * Provide a method that filters the dropdown options based on the current input. Overriding this
-   * prop means that you have to handle the filtering logic when the user types in the text input.
-   * Otherwise, a default built-in filtering function will be used.
-   */
-  filterItems: PropTypes.func,
-
-  /**
    * Specify the direction of the multiselect dropdown. Can be either top or bottom.
    */
   direction: PropTypes.oneOf(['top', 'bottom']),
@@ -1247,6 +1241,13 @@ FilterableMultiSelect.propTypes = {
   downshiftProps: PropTypes.shape(Downshift.propTypes),
 
   /**
+   * Provide a method that filters the dropdown options based on the current input. Overriding this
+   * prop means that you have to handle the filtering logic when the user types in the text input.
+   * Otherwise, a default built-in filtering function will be used.
+   */
+  filterItems: PropTypes.func,
+
+  /**
    * Specify whether the title text should be hidden or not
    */
   hideLabel: PropTypes.bool,
@@ -1261,6 +1262,14 @@ FilterableMultiSelect.propTypes = {
    * pre-selected
    */
   initialSelectedItems: PropTypes.array,
+
+  /**
+   * Specify native input attributes to place on the `<input>`, like maxLength.
+   * These are passed to downshift's getInputProps() and will override the
+   * internal input props.
+   * https://github.com/downshift-js/downshift?tab=readme-ov-file#getinputprops
+   */
+  inputProps: PropTypes.object,
 
   /**
    * Is the current selection invalid?
@@ -1381,12 +1390,4 @@ FilterableMultiSelect.propTypes = {
    * Provide the text that is displayed when the control is in warning state
    */
   warnText: PropTypes.node,
-
-  /**
-   * Specify native input attributes to place on the `<input>`, like maxLength.
-   * These are passed to downshift's getInputProps() and will override the
-   * internal input props.
-   * https://github.com/downshift-js/downshift?tab=readme-ov-file#getinputprops
-   */
-  inputProps: PropTypes.object,
 };
